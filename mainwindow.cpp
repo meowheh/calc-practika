@@ -12,3 +12,8 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_left_bracket_clicked()
+{
+    ui->lineEdit->insert("(");
+}
