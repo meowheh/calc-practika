@@ -16,7 +16,13 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_left_bracket_clicked();
+    void digitClicked();
+ //   void unaryOperatorClicked();
+    void on_point_clicked();
+    void on_sign_clicked();
+    void on_backspace_clicked();
+
+    void on_AC_clicked();
 
 private:
     Ui::MainWindow *ui;
