@@ -101,8 +101,12 @@ void MainWindow::on_backspace_clicked()
 //     ui->lineEdit->setText(QString::number(result));
 //     waitingForOperand = true;
 // }
+
 //слот на очистку данных
 void MainWindow::on_AC_clicked()
 {
      ui->lineEdit->setText("0");
 }
+
+//comment1
+//comment2
