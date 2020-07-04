@@ -6,7 +6,7 @@
 namespace Ui {
 class MainWindow;
 }
-
+class Button;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -17,11 +17,11 @@ public:
 
 private slots:
     void digitClicked();
- //   void unaryOperatorClicked();
+    void simpleOperatorClicked();
+    void powOperatorClicked();
     void on_point_clicked();
     void on_sign_clicked();
     void on_backspace_clicked();
-
     void on_AC_clicked();
 
 private:

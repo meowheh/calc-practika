@@ -1,12 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->lineEdit->setText("0");
+
     connect(ui->zero, SIGNAL(clicked()), this, SLOT(digitClicked()));
     connect(ui->one, SIGNAL(clicked()), this, SLOT(digitClicked()));
     connect(ui->two, SIGNAL(clicked()), this, SLOT(digitClicked()));
@@ -18,6 +19,21 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->eight, SIGNAL(clicked()), this, SLOT(digitClicked()));
     connect(ui->nine, SIGNAL(clicked()), this, SLOT(digitClicked()));
 
+    connect(ui->sqr,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->cube,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->pow, SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->sqr_ten,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->exp,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->sqrt,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->sqrt3,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+
+    connect(ui->comma,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->factorial,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->pi,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->plus,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->minus,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->mult,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->division,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
 }
 MainWindow::~MainWindow()
 {
@@ -32,14 +48,21 @@ void MainWindow::digitClicked(){
           return;
     if(ui->lineEdit->text() == "0")
         ui->lineEdit->clear();
-    ui->lineEdit->setText(ui->lineEdit->text() + QString::number(digitValue));
+    QString text = ui->lineEdit->text();
+    int position = ui->lineEdit->cursorPosition();
+    text.insert(position,QString::number(digitValue));
+    ui->lineEdit->setText(text);
+    ui->lineEdit->setCursorPosition(position+1);
 }
 
 //слот на сигнал нажатия точки
 void MainWindow::on_point_clicked()
 {
-    if (!ui->lineEdit->text().contains("."))
-            ui->lineEdit->setText(ui->lineEdit->text() + tr("."));
+   QString text = ui->lineEdit->text();
+   int position = ui->lineEdit->cursorPosition();
+   text.insert(position,".");
+   ui->lineEdit->setText(text);
+   ui->lineEdit->setCursorPosition(position+1);
 }
 
 //слот на сигнал нажатия смены знака
@@ -69,38 +92,97 @@ void MainWindow::on_sign_clicked()
 void MainWindow::on_backspace_clicked()
 {
     QString text = ui->lineEdit->text();
-        text.chop(1);
-        if (text.isEmpty()) {
+    int position = ui->lineEdit->cursorPosition();
+    text.remove(position-1,1);
+    if (text.isEmpty()) {
             text = "0";
-        }
-        ui->lineEdit->setText(text);
+     }
+    ui->lineEdit->setText(text);
+    ui->lineEdit->setCursorPosition(position-1);
+    if(text == "0"){
+        ui->lineEdit->setCursorPosition(0);
+    }
 }
-//void MainWindow::unaryOperatorClicked()
-// {
-//     QPushButton *clickedButton = qobject_cast< QPushButton *>(sender());
-//     QString clickedOperator = clickedButton->text();
-//     QString result = ui->lineEdit->text();
-//    // double operand = display->text().toDouble();
-//   //  double result = 0.0;
+//слот на сигналы возведения в степень и корня
+void MainWindow::powOperatorClicked()
+ {
+    int add=0;
+    QObject* button = QObject::sender();
+    if(ui->lineEdit->text() == "0")
+        ui->lineEdit->clear();
+    QString res = ui->lineEdit->text();
+    int position = ui->lineEdit->cursorPosition();
+    if(button == ui->sqr){
+        res.insert(position,"^2");
+       add = 2;
+    }
+   else if(button ==  ui->cube){
+       res.insert(position,"^3");
+       add = 2;
+    }
+  else if(button == ui->pow){
+       res.insert(position,"^");
+       add = 1;
+   }
+   else if(button ==  ui->sqr_ten){
+        res.insert(position,"10^");
+        add = 3;
+   }
+   else if(button == ui->exp){
+       res.insert(position,"e^");
+       add = 2;
+   }
+  else if (button == ui->sqrt){
+        res.insert(position,"sqrt(");
+        res.append(")");
+        add = 5;
+   }
+   else if (button ==  ui->sqrt3){
+       res.insert(position,"sqrt3(");
+        res.append(")");
+        add = 6;
+      }
+   ui->lineEdit->setText(res);
+   ui->lineEdit->setCursorPosition(position+add);
 
-//     if (clickedOperator == tr("Sqrt")) {
-//         if (operand < 0.0) {
-//             abortOperation();
-//             return;
-//         }
-//         result = sqrt(operand);
-//     } else if (clickedOperator == tr("x\262")) {
-//         result = pow(operand, 2.0);
-//     } else if (clickedOperator == tr("1/x")) {
-//         if (operand == 0.0) {
-//             abortOperation();
-//             return;
-//         }
-//         result = 1.0 / operand;
-//     }
-//     ui->lineEdit->setText(QString::number(result));
-//     waitingForOperand = true;
-// }
+}
+//слоты операций +,-,*,/,!, константы pi и ","
+void MainWindow::simpleOperatorClicked(){
+    int add = 0;
+    QObject* button = QObject::sender();
+    if(ui->lineEdit->text() == "0")
+        ui->lineEdit->clear();
+   int position = ui->lineEdit->cursorPosition();
+    QString res = ui->lineEdit->text();
+    if(button == ui->pi){
+        res.insert(position,"pi");
+        add = 2;
+    }
+    else{
+        if(button == ui->factorial){
+            res.insert(position,"!");
+         }
+        else if(button == ui->plus){
+            res.insert(position,"+");
+         }
+        else if(button == ui->minus){
+            res.insert(position,"-");
+         }
+        else if(button == ui->mult){
+            res.insert(position,"*");
+        }
+        else if(button == ui->division){
+            res.insert(position,"/");
+        }
+        else if(button == ui->comma){
+             res.insert(position,",");
+        }
+       add = 1;
+    }
+    ui->lineEdit->setText(res);
+    ui->lineEdit->setCursorPosition(position+add);
+}
+
 
 //слот на очистку данных
 void MainWindow::on_AC_clicked()
@@ -108,5 +190,3 @@ void MainWindow::on_AC_clicked()
      ui->lineEdit->setText("0");
 }
 
-
-//comment
