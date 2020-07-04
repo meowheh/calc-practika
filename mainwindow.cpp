@@ -190,3 +190,5 @@ void MainWindow::on_AC_clicked()
      ui->lineEdit->setText("0");
 }
 
+//qwerty
+
