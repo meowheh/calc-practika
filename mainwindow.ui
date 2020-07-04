@@ -494,14 +494,14 @@
      </widget>
     </item>
     <item row="3" column="5">
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="commit">
       <property name="text">
        <string>,</string>
       </property>
      </widget>
     </item>
     <item row="8" column="3">
-     <widget class="QPushButton" name="root">
+     <widget class="QPushButton" name="sqrt3">
       <property name="text">
        <string>sqrt3</string>
       </property>
