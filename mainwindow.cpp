@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    sumInMemory = 0.0;
 
     connect(ui->zero, SIGNAL(clicked()), this, SLOT(digitClicked()));
     connect(ui->one, SIGNAL(clicked()), this, SLOT(digitClicked()));
@@ -19,21 +20,32 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->eight, SIGNAL(clicked()), this, SLOT(digitClicked()));
     connect(ui->nine, SIGNAL(clicked()), this, SLOT(digitClicked()));
 
-    connect(ui->sqr,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
-    connect(ui->cube,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
-    connect(ui->pow, SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
-    connect(ui->sqr_ten,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
-    connect(ui->exp,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
-    connect(ui->sqrt,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
-    connect(ui->sqrt3,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->left_bracket,SIGNAL(clicked()),this,SLOT(bracketOperatorClicked()));
+    connect(ui->right_bracket,SIGNAL(clicked()),this,SLOT(bracketOperatorClicked()));
 
-    connect(ui->comma,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
-    connect(ui->factorial,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->sqr,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->pow, SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->sqrt,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->fraction,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+
     connect(ui->pi,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
     connect(ui->plus,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
     connect(ui->minus,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
     connect(ui->mult,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
     connect(ui->division,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+
+    connect(ui->sin,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+    connect(ui->cos,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+    connect(ui->tg,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+    connect(ui->arcsin,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+    connect(ui->arccos,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+    connect(ui->arctg,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+
+    connect(ui->MS,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
+    connect(ui->MR,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
+    connect(ui->MC,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
+    connect(ui->memory_plus,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
+
 }
 MainWindow::~MainWindow()
 {
@@ -116,37 +128,25 @@ void MainWindow::powOperatorClicked()
         res.insert(position,"^2");
        add = 2;
     }
-   else if(button ==  ui->cube){
-       res.insert(position,"^3");
-       add = 2;
-    }
   else if(button == ui->pow){
        res.insert(position,"^");
        add = 1;
-   }
-   else if(button ==  ui->sqr_ten){
-        res.insert(position,"10^");
-        add = 3;
-   }
-   else if(button == ui->exp){
-       res.insert(position,"e^");
-       add = 2;
    }
   else if (button == ui->sqrt){
         res.insert(position,"sqrt(");
         res.append(")");
         add = 5;
    }
-   else if (button ==  ui->sqrt3){
-       res.insert(position,"sqrt3(");
+  else if(button == ui->fraction){
+        res.insert(position,"1/(");
         res.append(")");
-        add = 6;
-      }
+        add = 3;
+    }
    ui->lineEdit->setText(res);
    ui->lineEdit->setCursorPosition(position+add);
 
 }
-//слоты операций +,-,*,/,!, константы pi и ","
+//слоты операций +,-,*,/ константы pi
 void MainWindow::simpleOperatorClicked(){
     int add = 0;
     QObject* button = QObject::sender();
@@ -159,10 +159,7 @@ void MainWindow::simpleOperatorClicked(){
         add = 2;
     }
     else{
-        if(button == ui->factorial){
-            res.insert(position,"!");
-         }
-        else if(button == ui->plus){
+         if(button == ui->plus){
             res.insert(position,"+");
          }
         else if(button == ui->minus){
@@ -174,21 +171,82 @@ void MainWindow::simpleOperatorClicked(){
         else if(button == ui->division){
             res.insert(position,"/");
         }
-        else if(button == ui->comma){
-             res.insert(position,",");
-        }
        add = 1;
     }
     ui->lineEdit->setText(res);
     ui->lineEdit->setCursorPosition(position+add);
 }
-
+//слот на скобки
+void MainWindow::bracketOperatorClicked(){
+    //int add = 0;
+    QObject* button = QObject::sender();
+    int position = ui->lineEdit->cursorPosition();
+    QString res = ui->lineEdit->text();
+    if(button == ui->left_bracket){
+        res.insert(position,"(");
+        res.append(")");
+    }
+    else if(button == ui->right_bracket){
+        res.insert(position,")");
+    }
+    ui->lineEdit->setText(res);
+    ui->lineEdit->setCursorPosition(position+1);
+}
+//слот для тригометрических функций
+void MainWindow::trigonometricOperatorClicked(){
+   int add = 0;
+   QPushButton *button = qobject_cast<QPushButton *>(sender());
+   int position = ui->lineEdit->cursorPosition();
+   QString res = ui->lineEdit->text();
+   QString text = button->text();
+   res.insert(position,text.append("()"));
+   add = text.size()-1;
+   ui->lineEdit->setText(res);
+   ui->lineEdit->setCursorPosition(position+add);
+}
 
 //слот на очистку данных
 void MainWindow::on_AC_clicked()
 {
      ui->lineEdit->setText("0");
 }
+//слот для клавиш MS, MR, MC, M+
+void MainWindow::memoryOperatorClicked(){
+    QPushButton *button = qobject_cast<QPushButton *>(sender());
+    if (button == ui->MS)
+    {
+        double temp =(ui->lineEdit->text()).toDouble();
+        if(temp != 0.0){
+            ui->statusBar->showMessage(tr("Значение ")+QString::number(sumInMemory)+tr(" было успешно записано"));
+            sumInMemory = temp;
+        }
+        else{
+            ui->statusBar->showMessage(tr("Вы ввели ноль или не вычислили результат выражения"));
+        }
 
-//qwerty
+    }
+    else if(button == ui->MR){
+            ui->lineEdit->setText(QString::number(sumInMemory));
+            ui->statusBar->showMessage(tr("Значение в памяти: ")+ QString::number(sumInMemory));
+    }
+    else if(button == ui->MC){
+        sumInMemory = 0;
+        ui->statusBar->showMessage(tr("Значение в памяти успешно обнулено"));
+    }
+    else if(button == ui->memory_plus){
+        double temp = (ui->lineEdit->text().toDouble());
+        if(temp!=0){
+            sumInMemory +=temp;
+            ui->statusBar->showMessage(tr("Значение успешно вычислено, чтобы его посмотреть нажмите MR"));
+        }
+        else{
+           ui->statusBar->showMessage(tr("Вы ввели ноль или не вычислили результат выражения"));
+        }
+    }
+}
 
+//слот кнопки вычисления
+void MainWindow::on_result_clicked()
+{
+
+}
