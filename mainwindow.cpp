@@ -160,22 +160,61 @@ void MainWindow::powOperatorClicked()
     QString res = ui->lineEdit->text();
     int position = ui->lineEdit->cursorPosition();
     if(button == ui->sqr){
-        res.insert(position,"^2");
-       add = 2;
+        if(position != 0){
+            if(res[position - 1].isDigit() || res[position-1] == ')'){
+                res.insert(position,"^2");
+                add = 2;
+            }
+            else  ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+          }else  ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+     }else if(button == ui->pow){
+        if(position != 0){
+            if(res[position - 1].isDigit() || res[position-1] == ')'){
+                res.insert(position,"^");
+                add = 1;
+            }
+            else ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+        }else ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
     }
-  else if(button == ui->pow){
-       res.insert(position,"^");
-       add = 1;
-   }
-  else if (button == ui->sqrt){
-         res.insert(position,"sqrt()");
-         add = 5;
+    else if(button == ui->pow){
+                    if(position != 0){
+                        if (res[position - 1].isDigit() || res[position-1] == ')'){
+                         res.insert(position,"^");
+                         add = 1;
+                        }
+                        else ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+                     }
+                    else ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+   }else if (button == ui->sqrt){
+        if(position != 0){
+            if(isSign(res[position - 1]) || res[position-1]=='('){
+                 res.insert(position,"sqrt()");
+                 add = 5;
+            }else{
+                ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));}
+        }
+        else{
+            if(res == "0")
+                 ui->lineEdit->clear();
+            res.insert(position,"sqrt()");
+            add = 5;
+        }
    }
   else if(button == ui->fraction){
-        if(position == 0){
+        if(position != 0){
+            if(isSign(res[position-1]) || res[position-1] == '('){
+                 res.insert(position,"1/()");
+                 add = 3;}
+            else{
+                 ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));
+                }
+        }
+        else{
+            if(res == "0")
+                ui->lineEdit->clear();
             res.insert(position,"1/()");
             add = 3;
-            }
+        }
     }
    ui->lineEdit->setText(res);
    ui->lineEdit->setCursorPosition(position+add);
@@ -190,23 +229,33 @@ void MainWindow::simpleOperatorClicked(){
    int position = ui->lineEdit->cursorPosition();
     QString res = ui->lineEdit->text();
     if(button == ui->pi){
-           res.insert(position,"pi");
-            add = 2;
+           res.insert(position,"3.14159");
+            add = 7;
     }
     else{
-         if(button == ui->plus){
-            res.insert(position,"+");
+        if(position != 0){
+            if(!isSign(res[position-1]) && res[position-1]!='^' && res[position-1]!='('){
+                if(button == ui->plus){
+                  res.insert(position,"+");
+                 add = 1;
+                 }
+                else if(button == ui->minus){
+                  res.insert(position,"-");
+                  add = 1;
+                 }
+                 else if(button == ui->mult){
+                  res.insert(position,"*");
+                  add = 1;
+                 }
+                else if(button == ui->division){
+                  res.insert(position,"/");
+                  add = 1;
+                 }
+            }
          }
-        else if(button == ui->minus){
-            res.insert(position,"-");
-         }
-        else if(button == ui->mult){
-            res.insert(position,"*");
-        }
-        else if(button == ui->division){
-            res.insert(position,"/");
-        }
-       add = 1;
+        if(!add){
+             ui->statusBar->showMessage(tr("Оператор ставится между числами или закрывающимися скобками"));
+            }
     }
     ui->lineEdit->setText(res);
     ui->lineEdit->setCursorPosition(position+add);
@@ -215,6 +264,9 @@ void MainWindow::simpleOperatorClicked(){
 void MainWindow::bracketOperatorClicked(){
     int add = 0;
     QObject* button = QObject::sender();
+    if(ui->lineEdit->text() == "0"){
+        ui->lineEdit->clear();
+    }
     int position = ui->lineEdit->cursorPosition();
     QString res = ui->lineEdit->text();
     if(button == ui->left_bracket){
@@ -233,11 +285,23 @@ void MainWindow::bracketOperatorClicked(){
 void MainWindow::trigonometricOperatorClicked(){
    int add = 0;
    QPushButton *button = qobject_cast<QPushButton *>(sender());
+   QString text = button->text();
+   if(ui->lineEdit->text() == "0"){
+        ui->lineEdit->clear();
+   }
    int position = ui->lineEdit->cursorPosition();
    QString res = ui->lineEdit->text();
-   QString text = button->text();
-   res.insert(position,text.append("()"));
-   add = text.size()-1;
+   if(position == 0){
+       res.insert(position,text.append("()"));
+       add = text.size()-1;
+   }
+   else if(isSign(res[position-1])|| res[position-1] == '('){
+       res.insert(position,text.append("()"));
+       add = text.size()-1;
+   }
+   else{
+       ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));
+   }
    ui->lineEdit->setText(res);
    ui->lineEdit->setCursorPosition(position+add);
 }
@@ -293,4 +357,8 @@ void MainWindow::on_result_clicked()
     else{
         ui->statusBar->showMessage(tr("Введите выражение"));
     }
+}
+
+ bool MainWindow::isSign(QChar s){
+    return (s == '*' || s == '/' || s == '+' || s == '-');
 }
