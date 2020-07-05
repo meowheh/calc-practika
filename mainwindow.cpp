@@ -70,11 +70,18 @@ void MainWindow::digitClicked(){
 //слот на сигнал нажатия точки
 void MainWindow::on_point_clicked()
 {
-   QString text = ui->lineEdit->text();
-   int position = ui->lineEdit->cursorPosition();
-   text.insert(position,".");
-   ui->lineEdit->setText(text);
-   ui->lineEdit->setCursorPosition(position+1);
+    QString text = ui->lineEdit->text();
+    int position = ui->lineEdit->cursorPosition();
+    if (text[position - 1].isDigit()) {
+        int temp_pos = position - 1;
+        while (text[temp_pos].isDigit() && temp_pos > 0)
+            temp_pos = temp_pos - 1;
+        if (text[temp_pos] != '.') {
+            text.insert(position, ".");
+            ui->lineEdit->setText(text);
+            ui->lineEdit->setCursorPosition(position + 1);
+        }
+    }
 }
 
 //слот на сигнал нажатия смены знака
@@ -104,15 +111,43 @@ void MainWindow::on_sign_clicked()
 void MainWindow::on_backspace_clicked()
 {
     QString text = ui->lineEdit->text();
-    int position = ui->lineEdit->cursorPosition();
-    text.remove(position-1,1);
-    if (text.isEmpty()) {
-            text = "0";
-     }
-    ui->lineEdit->setText(text);
-    ui->lineEdit->setCursorPosition(position-1);
-    if(text == "0"){
-        ui->lineEdit->setCursorPosition(0);
+    if (text != "0") {
+        int position = ui->lineEdit->cursorPosition();
+        if (position > 0){
+            if (text[position - 1] == '(' && text[position] == ')')
+                text.remove(position, 1);
+            text.remove(position - 1, 1);
+            if (text.isEmpty()) {
+                text = "0";
+                ui->lineEdit->setCursorPosition(0);
+            }
+            else{
+                if (position > 1)
+                    position = position - 1;
+                ui->lineEdit->setCursorPosition(position);
+            }
+            ui->lineEdit->setText(text);
+            while (text[position - 1].isLetter() && position > 0) {
+                text.remove(position - 1, 1);
+                if (text.isEmpty()) {
+                    text = "0";
+                    ui->lineEdit->setCursorPosition(0);
+                }
+                else{
+                    position = position - 1;
+                    ui->lineEdit->setCursorPosition(position);
+                }
+                ui->lineEdit->setText(text);
+            }
+            while (text[position].isLetter()) {
+                text.remove(position, 1);
+                if (text.isEmpty()) {
+                    text = "0";
+                    ui->lineEdit->setCursorPosition(0);
+                }
+                ui->lineEdit->setText(text);
+            }
+        }
     }
 }
 //слот на сигналы возведения в степень и корня
