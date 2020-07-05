@@ -133,14 +133,14 @@ void MainWindow::powOperatorClicked()
        add = 1;
    }
   else if (button == ui->sqrt){
-        res.insert(position,"sqrt(");
-        res.append(")");
-        add = 5;
+         res.insert(position,"sqrt()");
+         add = 5;
    }
   else if(button == ui->fraction){
-        res.insert(position,"1/(");
-        res.append(")");
-        add = 3;
+        if(position == 0){
+            res.insert(position,"1/()");
+            add = 3;
+            }
     }
    ui->lineEdit->setText(res);
    ui->lineEdit->setCursorPosition(position+add);
@@ -155,8 +155,8 @@ void MainWindow::simpleOperatorClicked(){
    int position = ui->lineEdit->cursorPosition();
     QString res = ui->lineEdit->text();
     if(button == ui->pi){
-        res.insert(position,"pi");
-        add = 2;
+           res.insert(position,"pi");
+            add = 2;
     }
     else{
          if(button == ui->plus){
@@ -178,19 +178,21 @@ void MainWindow::simpleOperatorClicked(){
 }
 //слот на скобки
 void MainWindow::bracketOperatorClicked(){
-    //int add = 0;
+    int add = 0;
     QObject* button = QObject::sender();
     int position = ui->lineEdit->cursorPosition();
     QString res = ui->lineEdit->text();
     if(button == ui->left_bracket){
         res.insert(position,"(");
-        res.append(")");
+        add = 1;
+      res.append(")");
     }
     else if(button == ui->right_bracket){
         res.insert(position,")");
     }
     ui->lineEdit->setText(res);
-    ui->lineEdit->setCursorPosition(position+1);
+
+    ui->lineEdit->setCursorPosition(position+add);
 }
 //слот для тригометрических функций
 void MainWindow::trigonometricOperatorClicked(){
@@ -248,5 +250,12 @@ void MainWindow::memoryOperatorClicked(){
 //слот кнопки вычисления
 void MainWindow::on_result_clicked()
 {
-
+    if(ui->lineEdit->text().toDouble() == 0 && ui->lineEdit->text() != "0"){
+        //calculate res
+        //ui->lineEdit->setText(res);
+        //ui->statusBar->showMessage(tr("Результат успешно вычислен"));
+    }
+    else{
+        ui->statusBar->showMessage(tr("Введите выражение"));
+    }
 }

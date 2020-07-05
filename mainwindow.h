@@ -27,6 +27,8 @@ private slots:
     void on_AC_clicked();
     void memoryOperatorClicked();
 
+    void on_result_clicked();
+
 private:
     Ui::MainWindow *ui;
     double sumInMemory;

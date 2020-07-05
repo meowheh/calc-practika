@@ -13,8 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    calculate.cpp \
+    enteredexception.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    calculate.h \
+    enteredexception.h
 
 FORMS    += mainwindow.ui
