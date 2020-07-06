@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     sumInMemory = 0.0;
-
+    ui->history->addItem("История вычислений");
     connect(ui->zero, SIGNAL(clicked()), this, SLOT(digitClicked()));
     connect(ui->one, SIGNAL(clicked()), this, SLOT(digitClicked()));
     connect(ui->two, SIGNAL(clicked()), this, SLOT(digitClicked()));
@@ -229,9 +229,11 @@ void MainWindow::simpleOperatorClicked(){
    int position = ui->lineEdit->cursorPosition();
     QString res = ui->lineEdit->text();
     if(button == ui->pi){
-           QString pi = QString::number(PI);
+           QString pi = QString::number(PI,'f',10);
+           pi.remove( QRegExp("0+$") );
+           pi.remove( QRegExp("\\.$") );
            res.insert(position,pi);
-            add = pi.length();
+           add = pi.length();
     }
     else{
         if(position != 0){
@@ -363,15 +365,26 @@ void MainWindow::on_result_clicked()
 {
     if(ui->lineEdit->text().toDouble() == 0 && ui->lineEdit->text() != "0"){
         QString text = ui->lineEdit->text();
+        if (!text.contains('=')){
+            Calculate calc(text,ui->radian->isChecked());
+            double res;
+            try{
+                res = calc.Resulting();
+                QString num = QString::number(res,'f',10);
+                num.remove( QRegExp("0+$") );
+                num.remove( QRegExp("\\.$") );
+                ui->lineEdit->setText(num);
+                ui->statusBar->showMessage(tr("Результат успешно вычислен"));
+                QString saving = text +" = "+ num;
+                ui->history->addItem(saving);
 
-        Calculate calc(text,ui->radian->isChecked());
-        double res;
-        try{
-            res = calc.Resulting();
-            ui->lineEdit->setText(QString::number(res));
-            ui->statusBar->showMessage(tr("Результат успешно вычислен"));
-        } catch(EnteredException &e){
-            ui->statusBar->showMessage(e.what());
+            } catch(EnteredException &e){
+                ui->statusBar->showMessage(e.what());
+            }
+         }
+        else{
+            text = text.right(text.length() - text.indexOf('=') - 2);
+            ui->lineEdit->setText(text);
         }
     }
     else{
@@ -381,4 +394,10 @@ void MainWindow::on_result_clicked()
 
  bool MainWindow::isSign(QChar s){
     return (s == '*' || s == '/' || s == '+' || s == '-');
+}
+
+void MainWindow::on_history_activated(const QString &arg1)
+{
+    if(arg1 != "История вычислений")
+        ui->lineEdit->setText(arg1);
 }

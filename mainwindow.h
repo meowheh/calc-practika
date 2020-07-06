@@ -30,6 +30,8 @@ private slots:
     void memoryOperatorClicked();
     void on_result_clicked();
 
+    void on_history_activated(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     double sumInMemory;
