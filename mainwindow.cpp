@@ -229,12 +229,12 @@ void MainWindow::simpleOperatorClicked(){
    int position = ui->lineEdit->cursorPosition();
     QString res = ui->lineEdit->text();
     if(button == ui->pi){
-           res.insert(position,"3.14159");
-            add = 7;
+           res.insert(position,"3.141592653589793");
+            add = 17;
     }
     else{
         if(position != 0){
-            if(!isSign(res[position-1]) && res[position-1]!='^' && res[position-1]!='('){
+            if(!isSign(res[position-1]) && res[position-1]!='^'){
                 if(button == ui->plus){
                   res.insert(position,"+");
                  add = 1;
@@ -253,8 +253,20 @@ void MainWindow::simpleOperatorClicked(){
                  }
             }
          }
+        else if(position == 0 || res == "0"){
+            if(button == ui->minus){
+                if(res == "0"){
+                    ui->lineEdit->clear();
+                    position = ui->lineEdit->cursorPosition();
+                    res = ui->lineEdit->text();
+                }
+                res.insert(position,'-');
+                add = 1;
+            }
+        }
+
         if(!add){
-             ui->statusBar->showMessage(tr("Оператор ставится между числами или закрывающимися скобками"));
+             ui->statusBar->showMessage(tr("Оператор ставится между числами или скобками"));
             }
     }
     ui->lineEdit->setText(res);
@@ -324,7 +336,6 @@ void MainWindow::memoryOperatorClicked(){
         else{
             ui->statusBar->showMessage(tr("Вы ввели ноль или не вычислили результат выражения"));
         }
-
     }
     else if(button == ui->MR){
             ui->lineEdit->setText(QString::number(sumInMemory));
@@ -350,9 +361,17 @@ void MainWindow::memoryOperatorClicked(){
 void MainWindow::on_result_clicked()
 {
     if(ui->lineEdit->text().toDouble() == 0 && ui->lineEdit->text() != "0"){
-        //calculate res
-        //ui->lineEdit->setText(res);
-        //ui->statusBar->showMessage(tr("Результат успешно вычислен"));
+        QString text = ui->lineEdit->text();
+
+        Calculate calc(text,ui->radian->isChecked());
+        double res;
+        try{
+            res = calc.Resulting();
+            ui->lineEdit->setText(QString::number(res));
+            ui->statusBar->showMessage(tr("Результат успешно вычислен"));
+        } catch(std::exception &e){
+            ui->statusBar->showMessage(tr(e.what()));
+        }
     }
     else{
         ui->statusBar->showMessage(tr("Введите выражение"));

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "calculate.h"
 
 namespace Ui {
 class MainWindow;
@@ -27,7 +28,6 @@ private slots:
     void on_backspace_clicked();
     void on_AC_clicked();
     void memoryOperatorClicked();
-
     void on_result_clicked();
 
 private:

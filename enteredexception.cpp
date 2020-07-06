@@ -1,8 +1,8 @@
 #include "enteredexception.h"
 
-EnteredException::EnteredException(QString err, int pos): textError(err), num(pos) {}
+EnteredException::EnteredException(QString er): err(er){}
 
-std::pair<QString, int> EnteredException::what(){
-    return std::make_pair(textError,num);
+QString EnteredException::what(){
+    return err;
 }
 

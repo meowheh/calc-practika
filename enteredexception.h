@@ -7,11 +7,10 @@
 
 class EnteredException: public std::exception{
 private:
-    QString textError;
-    int num;
+    QString err;
 public:
-    EnteredException(QString, int);
-    std::pair<QString,int> what();
+    EnteredException(QString );
+    QString what();
     virtual ~EnteredException() throw() {}
 };
 
