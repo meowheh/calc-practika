@@ -229,8 +229,9 @@ void MainWindow::simpleOperatorClicked(){
    int position = ui->lineEdit->cursorPosition();
     QString res = ui->lineEdit->text();
     if(button == ui->pi){
-           res.insert(position,"3.141592653589793");
-            add = 17;
+           QString pi = QString::number(PI);
+           res.insert(position,pi);
+            add = pi.length();
     }
     else{
         if(position != 0){
@@ -369,8 +370,8 @@ void MainWindow::on_result_clicked()
             res = calc.Resulting();
             ui->lineEdit->setText(QString::number(res));
             ui->statusBar->showMessage(tr("Результат успешно вычислен"));
-        } catch(std::exception &e){
-            ui->statusBar->showMessage(tr(e.what()));
+        } catch(EnteredException &e){
+            ui->statusBar->showMessage(e.what());
         }
     }
     else{
