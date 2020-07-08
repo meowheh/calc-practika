@@ -15,10 +15,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     calculate.cpp \
-    enteredexception.cpp
+    enteredexception.cpp \
+    geodetictask.cpp
 
 HEADERS  += mainwindow.h \
     calculate.h \
-    enteredexception.h
+    enteredexception.h \
+    geodetictask.h
 
 FORMS    += mainwindow.ui

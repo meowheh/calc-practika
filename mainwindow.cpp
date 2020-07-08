@@ -113,7 +113,7 @@ void MainWindow::on_backspace_clicked()
     QString text = ui->lineEdit->text();
     if (text != "0") {
         int position = ui->lineEdit->cursorPosition();
-        if (position > 0){
+        if (position > 0 && text[position-1] != ';'){
             if (text[position - 1] == '(' && text[position] == ')')
                 text.remove(position, 1);
             text.remove(position - 1, 1);
@@ -367,17 +367,54 @@ void MainWindow::on_result_clicked()
         QString text = ui->lineEdit->text();
         if (!text.contains('=')){
             Calculate calc(text,ui->radian->isChecked());
+            GeodeticTask GT (text);
             double res;
+            QVector <double> res_z;
             try{
-                res = calc.Resulting();
-                QString num = QString::number(res,'f',10);
-                num.remove( QRegExp("0+$") );
-                num.remove( QRegExp("\\.$") );
-                ui->lineEdit->setText(num);
-                ui->statusBar->showMessage(tr("Результат успешно вычислен"));
-                QString saving = text +" = "+ num;
-                ui->history->addItem(saving);
-
+                if (text.contains("ПГЗ")){
+                    res_z = GT.CalcPGZ();
+                    QString num1 = QString::number(res_z[0],'f',10);
+                    QString num2 = QString::number(res_z[1],'f',10);
+                    num1.remove( QRegExp("0+$") );
+                    num1.remove( QRegExp("\\.$") );
+                    num2.remove( QRegExp("0+$") );
+                    num2.remove( QRegExp("\\.$") );
+                    ui->lineEdit->setText("X2=");
+                    ui->lineEdit->insert(num1);
+                    ui->lineEdit->insert("; Y2=");
+                    ui->lineEdit->insert(num2);
+                    ui->statusBar->showMessage(tr("Результат успешно вычислен: X2,Y2 - координаты (deg)"));
+                    QString saving = text +": X2= "+ num1 + "; Y2= " + num2;
+                    ui->history->addItem(saving);
+                }
+                else{
+                    if (text.contains("ОГЗ")){
+                        res_z = GT.CalcOGZ();
+                        QString num1 = QString::number(res_z[0],'f',10);
+                        QString num2 = QString::number(res_z[1],'f',10);
+                        num1.remove( QRegExp("0+$") );
+                        num1.remove( QRegExp("\\.$") );
+                        num2.remove( QRegExp("0+$") );
+                        num2.remove( QRegExp("\\.$") );
+                        ui->lineEdit->setText("d=");
+                        ui->lineEdit->insert(num1);
+                        ui->lineEdit->insert("; a=");
+                        ui->lineEdit->insert(num2);
+                        ui->statusBar->showMessage(tr("Результат успешно вычислен: d-рассторяние(kbt), a-дирекционный угол(deg)"));
+                        QString saving = text +": d= "+ num1 + "; a= " + num2;
+                        ui->history->addItem(saving);
+                    }
+                    else{
+                        res = calc.Resulting();
+                        QString num = QString::number(res,'f',10);
+                        num.remove( QRegExp("0+$") );
+                        num.remove( QRegExp("\\.$") );
+                        ui->lineEdit->setText(num);
+                        ui->statusBar->showMessage(tr("Результат успешно вычислен"));
+                        QString saving = text +" = "+ num;
+                        ui->history->addItem(saving);
+                    }
+                }
             } catch(EnteredException &e){
                 ui->statusBar->showMessage(e.what());
             }
@@ -400,4 +437,22 @@ void MainWindow::on_history_activated(const QString &arg1)
 {
     if(arg1 != "История вычислений")
         ui->lineEdit->setText(arg1);
+}
+
+void MainWindow::on_pgzButton_clicked()
+{
+    if(ui->lineEdit->text() == "0"){
+        ui->lineEdit->clear();
+        ui->lineEdit->setText(tr("ПГЗ( ; ; ; )"));
+        ui->statusBar->showMessage(tr("ПГЗ(X1, Y1, d, a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - дирекционный угол (deg)"));
+    }
+}
+
+void MainWindow::on_ogzButton_clicked()
+{
+    if(ui->lineEdit->text() == "0"){
+        ui->lineEdit->clear();
+        ui->lineEdit->setText(tr("ОГЗ( ; ; ; )"));
+        ui->statusBar->showMessage(tr("ОГЗ(X1, Y1, X2, Y2): X1, Y1, X2, Y2 - координаты (deg)"));
+    }
 }

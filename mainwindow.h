@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "calculate.h"
+#include "geodetictask.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,6 +32,9 @@ private slots:
     void on_result_clicked();
 
     void on_history_activated(const QString &arg1);
+
+    void on_pgzButton_clicked();
+    void on_ogzButton_clicked();
 
 private:
     Ui::MainWindow *ui;

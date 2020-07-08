@@ -25,6 +25,7 @@ class Calculate
 public:
     Calculate(QString, bool);
     double Resulting();                                                      //получение результата
+
 private:
     QString data;                                                            //всё выражение
     bool angle;                                                              //угол: 1 - радианы, 0 - градусы
