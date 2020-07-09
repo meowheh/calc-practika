@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "calculate.h"
 #include "geodetictask.h"
+#include <QToolTip>
 
 namespace Ui {
 class MainWindow;

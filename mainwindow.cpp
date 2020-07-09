@@ -55,6 +55,7 @@ MainWindow::~MainWindow()
 //слот на сигнал нажатия цифры
 void MainWindow::digitClicked(){
    QPushButton *clickedButton = qobject_cast<QPushButton *>(sender());
+    ui->lineEdit->setStyleSheet("border: 1px solid blue");
     int digitValue = clickedButton->text().toInt();
     if (ui->lineEdit->text() == "0" && digitValue == 0.0)
           return;
@@ -70,6 +71,7 @@ void MainWindow::digitClicked(){
 //слот на сигнал нажатия точки
 void MainWindow::on_point_clicked()
 {
+    ui->lineEdit->setStyleSheet("border: 1px solid blue");
     QString text = ui->lineEdit->text();
     int position = ui->lineEdit->cursorPosition();
     if (text[position - 1].isDigit()) {
@@ -81,36 +83,47 @@ void MainWindow::on_point_clicked()
             ui->lineEdit->setText(text);
             ui->lineEdit->setCursorPosition(position + 1);
         }
+        else{
+             ui->lineEdit->setStyleSheet("border: 1px solid red");
+        }
     }
 }
 
 //слот на сигнал нажатия смены знака
 void MainWindow::on_sign_clicked()
 {
+    ui->lineEdit->setStyleSheet("border: 1px solid blue");
     QString text = ui->lineEdit->text();
-    double value = text.toDouble();
-         if (value > 0.0) {
-             text.prepend(tr("-"));
-         } else if (value < 0.0) {
-             text.remove(0, 1);
-         }
-         else if(value == 0){
+    if(!text.contains(':')){
+        double value = text.toDouble();
+            if (value > 0.0) {
+              text.prepend(tr("-"));
+             } else if (value < 0.0) {
+                 text.remove(0, 1);
+            }
+             else if(value == 0){
+                if(text.at(0)== '-' && text.at(1)=='(') {
+                     text.remove(0,2);
+                     text.remove(text.size()-1,1);
+                 }
+                else{
+                   text.prepend("-(");
+                  text.append(")");
+                 }
+            }
+             ui->lineEdit->setText(text);
+     }
+    else{
+        ui->statusBar->showMessage(tr("Недопустимая операция"));
+        ui->lineEdit->setStyleSheet("border: 1px solid red");
+    }
 
-             if(text.at(0)== '-' && text.at(1)=='(') {
-                 text.remove(0,2);
-                 text.remove(text.size()-1,1);
-             }
-             else{
-                text.prepend("-(");
-                text.append(")");
-             }
-         }
-         ui->lineEdit->setText(text);
 }
 //слот на сигнал Backspace
 void MainWindow::on_backspace_clicked()
 {
     QString text = ui->lineEdit->text();
+    ui->lineEdit->setStyleSheet("border: 1px solid blue");
     if (text != "0") {
         int position = ui->lineEdit->cursorPosition();
         if (position > 0 && text[position-1] != ';'){
@@ -154,59 +167,72 @@ void MainWindow::on_backspace_clicked()
 void MainWindow::powOperatorClicked()
  {
     int add=0;
+    ui->lineEdit->setStyleSheet("border: 1px solid blue");
     QObject* button = QObject::sender();
     if(ui->lineEdit->text() == "0")
         ui->lineEdit->clear();
     QString res = ui->lineEdit->text();
+    QString toolTipText;
     int position = ui->lineEdit->cursorPosition();
     if(button == ui->sqr){
         if(position != 0){
             if(res[position - 1].isDigit() || res[position-1] == ')'){
                 res.insert(position,"^2");
                 add = 2;
+                toolTipText = tr("( <выражение> )^2");
             }
-            else  ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
-          }else  ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+            else {
+                ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+                ui->lineEdit->setStyleSheet("border: 1px solid red");
+            }
+          }else {
+               ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+                ui->lineEdit->setStyleSheet("border: 1px solid red");
+              }
      }else if(button == ui->pow){
         if(position != 0){
             if(res[position - 1].isDigit() || res[position-1] == ')'){
                 res.insert(position,"^");
                 add = 1;
+                toolTipText = tr("( <выражение> )^( <выражение> )");
             }
-            else ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
-        }else ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
-    }
-    else if(button == ui->pow){
-                    if(position != 0){
-                        if (res[position - 1].isDigit() || res[position-1] == ')'){
-                         res.insert(position,"^");
-                         add = 1;
-                        }
-                        else ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
-                     }
-                    else ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+            else{
+                ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+                 ui->lineEdit->setStyleSheet("border: 1px solid red");
+            }
+        }else {
+            ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+            ui->lineEdit->setStyleSheet("border: 1px solid red");
+        }
    }else if (button == ui->sqrt){
         if(position != 0){
             if(isSign(res[position - 1]) || res[position-1]=='('){
                  res.insert(position,"sqrt()");
                  add = 5;
+                 toolTipText = tr("sqrt( <выражение> )");
             }else{
-                ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));}
+                ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));
+                ui->lineEdit->setStyleSheet("border: 1px solid red");
+            }
         }
         else{
             if(res == "0")
                  ui->lineEdit->clear();
             res.insert(position,"sqrt()");
             add = 5;
+            toolTipText = tr("sqrt( <выражение> )");
         }
    }
   else if(button == ui->fraction){
         if(position != 0){
             if(isSign(res[position-1]) || res[position-1] == '('){
                  res.insert(position,"1/()");
-                 add = 3;}
+                 add = 3;
+                 toolTipText = tr("1 / ( <выражение> )");
+            }
             else{
                  ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));
+                  ui->lineEdit->setStyleSheet("border: 1px solid red");
                 }
         }
         else{
@@ -214,15 +240,20 @@ void MainWindow::powOperatorClicked()
                 ui->lineEdit->clear();
             res.insert(position,"1/()");
             add = 3;
+            toolTipText = tr("1 / ( <выражение> )");
         }
     }
-   ui->lineEdit->setText(res);
-   ui->lineEdit->setCursorPosition(position+add);
+   if(add){
+     ui->lineEdit->setText(res);
+     ui->lineEdit->setCursorPosition(position+add);
+     QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)),toolTipText);
+   }
 
 }
 //слоты операций +,-,*,/ константы pi
 void MainWindow::simpleOperatorClicked(){
     int add = 0;
+    ui->lineEdit->setStyleSheet("border: 1px solid blue");
     QObject* button = QObject::sender();
     if(ui->lineEdit->text() == "0")
         ui->lineEdit->clear();
@@ -267,9 +298,9 @@ void MainWindow::simpleOperatorClicked(){
                 add = 1;
             }
         }
-
         if(!add){
              ui->statusBar->showMessage(tr("Оператор ставится между числами или скобками"));
+             ui->lineEdit->setStyleSheet("border: 1px solid red");
             }
     }
     ui->lineEdit->setText(res);
@@ -278,6 +309,7 @@ void MainWindow::simpleOperatorClicked(){
 //слот на скобки
 void MainWindow::bracketOperatorClicked(){
     int add = 0;
+    ui->lineEdit->setStyleSheet("border: 1px solid blue");
     QObject* button = QObject::sender();
     if(ui->lineEdit->text() == "0"){
         ui->lineEdit->clear();
@@ -293,7 +325,6 @@ void MainWindow::bracketOperatorClicked(){
         res.insert(position,")");
     }
     ui->lineEdit->setText(res);
-
     ui->lineEdit->setCursorPosition(position+add);
 }
 //слот для тригометрических функций
@@ -314,20 +345,26 @@ void MainWindow::trigonometricOperatorClicked(){
        res.insert(position,text.append("()"));
        add = text.size()-1;
    }
+   if(add){
+       ui->lineEdit->setText(res);
+       ui->lineEdit->setCursorPosition(position+add);
+       QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)),button->text() + tr("( <выражение> )"));
+   }
    else{
        ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));
+       ui->lineEdit->setStyleSheet("border: 1px solid red");
    }
-   ui->lineEdit->setText(res);
-   ui->lineEdit->setCursorPosition(position+add);
 }
 
 //слот на очистку данных
 void MainWindow::on_AC_clicked()
 {
+    ui->lineEdit->setStyleSheet("border: 1px solid blue");
      ui->lineEdit->setText("0");
 }
 //слот для клавиш MS, MR, MC, M+
 void MainWindow::memoryOperatorClicked(){
+    ui->lineEdit->setStyleSheet("border: 1px solid blue");
     QPushButton *button = qobject_cast<QPushButton *>(sender());
     if (button == ui->MS)
     {
@@ -356,6 +393,7 @@ void MainWindow::memoryOperatorClicked(){
         }
         else{
            ui->statusBar->showMessage(tr("Вы ввели ноль или не вычислили результат выражения"));
+           ui->lineEdit->setStyleSheet("border: 1px solid red");
         }
     }
 }
@@ -364,6 +402,7 @@ void MainWindow::memoryOperatorClicked(){
 void MainWindow::on_result_clicked()
 {
     if(ui->lineEdit->text().toDouble() == 0 && ui->lineEdit->text() != "0"){
+        ui->lineEdit->setStyleSheet("border: 1px solid blue");
         QString text = ui->lineEdit->text();
         if (!text.contains('=')){
             Calculate calc(text,ui->radian->isChecked());
@@ -417,15 +456,19 @@ void MainWindow::on_result_clicked()
                 }
             } catch(EnteredException &e){
                 ui->statusBar->showMessage(e.what());
+                ui->lineEdit->setStyleSheet("border: 1px solid red");
             }
          }
         else{
-            text = text.right(text.length() - text.indexOf('=') - 2);
-            ui->lineEdit->setText(text);
+            QChar splitter = '=';
+            if(text.contains(':')) splitter = ':';
+             text = text.right(text.length() - text.indexOf(splitter) - 2);
+             ui->lineEdit->setText(text);
         }
     }
     else{
         ui->statusBar->showMessage(tr("Введите выражение"));
+        ui->lineEdit->setStyleSheet("border: 1px solid red");
     }
 }
 
@@ -441,18 +484,34 @@ void MainWindow::on_history_activated(const QString &arg1)
 
 void MainWindow::on_pgzButton_clicked()
 {
-    if(ui->lineEdit->text() == "0"){
+    if(ui->lineEdit->text() == "0" || ui->lineEdit->text() == ""){
+        ui->lineEdit->setStyleSheet("border: 1px solid blue");
         ui->lineEdit->clear();
+        int currentPosition = ui->lineEdit->cursorPosition();
         ui->lineEdit->setText(tr("ПГЗ( ; ; ; )"));
-        ui->statusBar->showMessage(tr("ПГЗ(X1, Y1, d, a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - дирекционный угол (deg)"));
+        ui->statusBar->showMessage(tr("ПГЗ(X1; Y1; d; a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - дирекционный угол (deg)"));
+        QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)), tr("ПГЗ(X1; Y1; d; a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - дирекционный угол (deg)"));
+        ui->lineEdit->setCursorPosition(currentPosition+4);
+    }
+    else{
+        ui->statusBar->showMessage(tr("Очистите строку вывода"));
+        ui->lineEdit->setStyleSheet("border: 1px solid red");
     }
 }
 
 void MainWindow::on_ogzButton_clicked()
 {
-    if(ui->lineEdit->text() == "0"){
+    if(ui->lineEdit->text() == "0" || ui->lineEdit->text() == ""){
+        ui->lineEdit->setStyleSheet("border: 1px solid blue");
         ui->lineEdit->clear();
+        int currentPosition = ui->lineEdit->cursorPosition();
         ui->lineEdit->setText(tr("ОГЗ( ; ; ; )"));
-        ui->statusBar->showMessage(tr("ОГЗ(X1, Y1, X2, Y2): X1, Y1, X2, Y2 - координаты (deg)"));
+        ui->statusBar->showMessage(tr("ОГЗ(X1; Y1; X2; Y2): X1, Y1, X2, Y2 - координаты (deg)"));
+        QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)), tr("ОГЗ(X1; Y1; X2; Y2): X1, Y1, X2, Y2 - координаты (deg)"));
+        ui->lineEdit->setCursorPosition(currentPosition+4);
+    }
+    else{
+        ui->statusBar->showMessage(tr("Очистите строку вывода"));
+        ui->lineEdit->setStyleSheet("border: 1px solid red");
     }
 }

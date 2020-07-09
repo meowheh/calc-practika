@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>720</width>
-    <height>363</height>
+    <height>386</height>
    </rect>
   </property>
   <property name="font">
@@ -66,6 +66,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Деление&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>/</string>
       </property>
@@ -90,6 +93,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Сложить число из памяти с числом в строке&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>M+</string>
       </property>
@@ -113,6 +119,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Плюс&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>+</string>
@@ -186,6 +195,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Сохранить число из строки вывода в память&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>MS</string>
       </property>
@@ -209,6 +221,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Арксинус&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>arcsin</string>
@@ -258,6 +273,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Минус&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>-</string>
       </property>
@@ -282,6 +300,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Прочитать число из памяти&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>MR</string>
       </property>
@@ -305,6 +326,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Аркосинус&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>arccos</string>
@@ -378,6 +402,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Смена знака выражения&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>+/-</string>
       </property>
@@ -401,6 +428,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разделитель дробной и целой части числа&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>.</string>
@@ -426,6 +456,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Умножение&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>x</string>
       </property>
@@ -449,6 +482,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Очистить память&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>MC</string>
@@ -474,6 +510,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Арктангенс&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>arctg</string>
       </property>
@@ -497,6 +536,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Число &lt;span style=&quot; font-family:'times,serif,palatino linotype,new athena unicode,athena,gentium,code2000'; color:#202122; background-color:#f8f9fa;&quot;&gt;π&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>pi</string>
@@ -522,6 +564,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Синус&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>sin</string>
       </property>
@@ -545,6 +590,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Квадратный корень&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>sqrt</string>
@@ -571,6 +619,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Угол в радианах&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Радианы</string>
@@ -599,6 +650,9 @@
           <pointsize>10</pointsize>
          </font>
         </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Угол в градусах&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <property name="text">
          <string>Градусы</string>
         </property>
@@ -611,6 +665,9 @@
           <width>345</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Последние операции&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
@@ -632,6 +689,9 @@
          <font>
           <pointsize>10</pointsize>
          </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Очистить строку вывода&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>All Clear</string>
@@ -659,6 +719,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Удалить последний символ из строки вывода&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>Backspace</string>
       </property>
@@ -682,6 +745,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Возведение числа x в степень y&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>x^y</string>
@@ -707,6 +773,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Возведение числа x в квадрат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>x^2</string>
       </property>
@@ -731,6 +800,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Косинус&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>cos</string>
       </property>
@@ -754,6 +826,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Дробь с произвольным основанием x&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>1/x</string>
@@ -827,6 +902,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Закрывающая скобка&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>)</string>
       </property>
@@ -874,6 +952,9 @@
        <font>
         <pointsize>10</pointsize>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Тангенс&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string>tg</string>
@@ -947,6 +1028,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Открывающая скобка&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>(</string>
       </property>
@@ -971,6 +1055,9 @@
         <pointsize>10</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Вычислить результат&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>=</string>
       </property>
@@ -990,6 +1077,9 @@
         <height>30</height>
        </size>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Прямая геодезическая задача&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>ПГЗ</string>
       </property>
@@ -1003,39 +1093,15 @@
         <height>30</height>
        </size>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Обратная геодезическая задача&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
       <property name="text">
        <string>ОГЗ</string>
       </property>
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>720</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>8</pointsize>
-    </font>
-   </property>
-   <widget class="QMenu" name="menu">
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>Калькулятор</string>
-    </property>
-    <addaction name="action_2"/>
-   </widget>
-   <addaction name="menu"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
