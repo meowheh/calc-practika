@@ -2,7 +2,9 @@
 #define CALCULATE_H
 
 #include <cmath>
+#include <QRegExp>
 #include "enteredexception.h"
+
 
 const double PI = 3.141592653589793;
 const double delta = 0.000000000001;
@@ -26,6 +28,7 @@ public:
     Calculate(QString, bool);
     double Resulting();                                                      //получение результата
     static bool isSign(QChar);
+    static QString deleteExtraNulls(QString num);
 
 private:
     QString data;                                                            //всё выражение

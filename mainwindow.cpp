@@ -82,6 +82,7 @@ void MainWindow::on_sign_clicked()
     }
 
 }
+
 //слот на сигнал Backspace
 void MainWindow::on_backspace_clicked()
 {
@@ -126,93 +127,51 @@ void MainWindow::on_backspace_clicked()
         }
     }
 }
+
 //слот на сигналы возведения в степень и корня
 void MainWindow::powOperatorClicked()
  {
-    int add=0;
-    ui->lineEdit->setStyleSheet("border: 1px solid blue");
-    QObject* button = QObject::sender();
     if(ui->lineEdit->text() == "0")
         ui->lineEdit->clear();
-    QString res = ui->lineEdit->text();
+    ui->lineEdit->setStyleSheet("border: 1px solid blue");
+    std::pair<QString,int> result;
+    QObject* button = QObject::sender();
     QString toolTipText;
+    result.first = ui->lineEdit->text();
+    result.second = 0;
     int position = ui->lineEdit->cursorPosition();
     if(button == ui->sqr){
-        if(position != 0){
-            if(res[position - 1].isDigit() || res[position-1] == ')'){
-                res.insert(position,"^2");
-                add = 2;
-                toolTipText = tr("( <выражение> )^2");
-            }
-            else {
-                ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
-                ui->lineEdit->setStyleSheet("border: 1px solid red");
-            }
-          }else {
-               ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
-                ui->lineEdit->setStyleSheet("border: 1px solid red");
-              }
-     }else if(button == ui->pow){
-        if(position != 0){
-            if(res[position - 1].isDigit() || res[position-1] == ')'){
-                res.insert(position,"^");
-                add = 1;
-                toolTipText = tr("( <выражение> )^( <выражение> )");
-            }
-            else{
-                ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
-                 ui->lineEdit->setStyleSheet("border: 1px solid red");
-            }
-        }else {
-            ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
-            ui->lineEdit->setStyleSheet("border: 1px solid red");
-        }
+
+       result = powText(position,result.first,"^2");
+       if(result.second)
+            toolTipText = tr("( <выражение> )^2");
+
+    }
+    else if(button == ui->pow){
+        result = powText(position, result.first,"^");
+        if(result.second)
+             toolTipText = tr("( <выражение> )^( <выражение> )");
+
    }else if (button == ui->sqrt){
-        if(position != 0){
-            if(Calculate::isSign(res[position - 1]) || res[position-1]=='('){
-                 res.insert(position,"sqrt()");
-                 add = 5;
-                 toolTipText = tr("sqrt( <выражение> )");
-            }else{
-                ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));
-                ui->lineEdit->setStyleSheet("border: 1px solid red");
-            }
-        }
-        else{
-            if(res == "0")
-                 ui->lineEdit->clear();
-            res.insert(position,"sqrt()");
-            add = 5;
-            toolTipText = tr("sqrt( <выражение> )");
-        }
+           result = sqrtFractText(position, result.first, "sqrt()");
+          if(result.second)
+               toolTipText = tr("sqrt( <выражение> )");
+
    }
   else if(button == ui->fraction){
-        if(position != 0){
-            if(Calculate::isSign(res[position-1]) || res[position-1] == '('){
-                 res.insert(position,"1/()");
-                 add = 3;
-                 toolTipText = tr("1 / ( <выражение> )");
-            }
-            else{
-                 ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));
-                  ui->lineEdit->setStyleSheet("border: 1px solid red");
-                }
-        }
-        else{
-            if(res == "0")
-                ui->lineEdit->clear();
-            res.insert(position,"1/()");
-            add = 3;
+        result = sqrtFractText(position,result.first, "1/()");
+        if(result.second)
             toolTipText = tr("1 / ( <выражение> )");
-        }
+
     }
-   if(add){
-     ui->lineEdit->setText(res);
-     ui->lineEdit->setCursorPosition(position+add);
+   if(result.second){
+     ui->lineEdit->setText(result.first);
+     ui->lineEdit->setCursorPosition(position+result.second);
      QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)),toolTipText);
    }
 
 }
+
 //слоты операций +,-,*,/ константы pi
 void MainWindow::simpleOperatorClicked(){
     int add = 0;
@@ -224,8 +183,7 @@ void MainWindow::simpleOperatorClicked(){
     QString res = ui->lineEdit->text();
     if(button == ui->pi){
            QString pi = QString::number(PI,'f',10);
-           pi.remove( QRegExp("0+$") );
-           pi.remove( QRegExp("\\.$") );
+           pi = Calculate::deleteExtraNulls(pi);
            res.insert(position,pi);
            add = pi.length();
     }
@@ -269,6 +227,7 @@ void MainWindow::simpleOperatorClicked(){
     ui->lineEdit->setText(res);
     ui->lineEdit->setCursorPosition(position+add);
 }
+
 //слот на скобки
 void MainWindow::bracketOperatorClicked(){
     int add = 0;
@@ -290,6 +249,7 @@ void MainWindow::bracketOperatorClicked(){
     ui->lineEdit->setText(res);
     ui->lineEdit->setCursorPosition(position+add);
 }
+
 //слот для тригометрических функций
 void MainWindow::trigonometricOperatorClicked(){
    int add = 0;
@@ -325,6 +285,7 @@ void MainWindow::on_AC_clicked()
     ui->lineEdit->setStyleSheet("border: 1px solid blue");
      ui->lineEdit->setText("0");
 }
+
 //слот для клавиш MS, MR, MC, M+
 void MainWindow::memoryOperatorClicked(){
     ui->lineEdit->setStyleSheet("border: 1px solid blue");
@@ -377,10 +338,8 @@ void MainWindow::on_result_clicked()
                     res_z = GT.CalcPGZ();
                     QString num1 = QString::number(res_z[0],'f',10);
                     QString num2 = QString::number(res_z[1],'f',10);
-                    num1.remove( QRegExp("0+$") );
-                    num1.remove( QRegExp("\\.$") );
-                    num2.remove( QRegExp("0+$") );
-                    num2.remove( QRegExp("\\.$") );
+                    num1 = Calculate::deleteExtraNulls(num1);
+                    num2 = Calculate::deleteExtraNulls(num2);
                     ui->lineEdit->setText("X2=");
                     ui->lineEdit->insert(num1);
                     ui->lineEdit->insert("; Y2=");
@@ -394,10 +353,8 @@ void MainWindow::on_result_clicked()
                         res_z = GT.CalcOGZ();
                         QString num1 = QString::number(res_z[0],'f',10);
                         QString num2 = QString::number(res_z[1],'f',10);
-                        num1.remove( QRegExp("0+$") );
-                        num1.remove( QRegExp("\\.$") );
-                        num2.remove( QRegExp("0+$") );
-                        num2.remove( QRegExp("\\.$") );
+                        num1 = Calculate::deleteExtraNulls(num1);
+                        num2 = Calculate::deleteExtraNulls(num2);
                         ui->lineEdit->setText("d=");
                         ui->lineEdit->insert(num1);
                         ui->lineEdit->insert("; a=");
@@ -409,8 +366,7 @@ void MainWindow::on_result_clicked()
                     else{
                         res = calc.Resulting();
                         QString num = QString::number(res,'f',10);
-                        num.remove( QRegExp("0+$") );
-                        num.remove( QRegExp("\\.$") );
+                        num = Calculate::deleteExtraNulls(num);
                         ui->lineEdit->setText(num);
                         ui->statusBar->showMessage(tr("Результат успешно вычислен"));
                         QString saving = text +" = "+ num;
@@ -526,4 +482,40 @@ void MainWindow::init(){
     connect(ui->MC,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
     connect(ui->memory_plus,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
 
+}
+std::pair<QString,int> MainWindow::powText(int position,QString text, QString name){
+    QString res = text;
+    int add = 0;
+    if(position != 0){
+        if(res[position - 1].isDigit() || res[position-1] == ')'){
+            res.insert(position,name);
+            add = name.length();
+        }
+    }
+    if(!add){
+           ui->statusBar->showMessage(tr("Возводить в степень можно скобку или число"));
+           ui->lineEdit->setStyleSheet("border: 1px solid red");
+     }
+    return std::make_pair(res,add);
+}
+
+std::pair<QString,int> MainWindow::sqrtFractText(int position, QString text, QString name){
+    QString res = text;
+    int add = 0;
+    if(position != 0){
+        if(Calculate::isSign(res[position - 1]) || res[position-1]=='('){
+             res.insert(position,name);
+             add = name.length()-1;
+        }else{
+            ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));
+            ui->lineEdit->setStyleSheet("border: 1px solid red");
+        }
+    }
+    else{
+        if(res == "0")
+             ui->lineEdit->clear();
+        res.insert(position,name);
+        add = name.length()-1;
+    }
+    return std::make_pair(res,add);
 }

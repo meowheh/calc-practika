@@ -188,24 +188,25 @@ std::pair<QString,double> Calculate::FuncName(QString fun, std::pair<QString,dou
          }
          return std::make_pair(res.first,num);
     }
-    if(param >= -1 && param <= 1){
-       double num;
-       if(fun == "arcsin"){
-            num = asin(param);
-            if(!angle){
-                  num = num*180/PI;
-            }
-            return std::make_pair(res.first,num);
-            }
-            if(fun == "arccos"){
-                num = acos(param);
+   if(fun == "arcsin"){
+           if(param >= -1 && param <= 1){
+               double num = asin(param);
+                if(!angle){
+                   num = num*180/PI;
+             }
+                return std::make_pair(res.first,num);
+            }else throw EnteredException("Аргумент arcsin не может быть больше 1 по модулю");
+   }
+   if(fun == "arccos"){
+           if(param >= -1 && param <= 1){
+              double num = acos(param);
                 if(!angle){
                     num = num*180/PI;}
                 return std::make_pair(res.first,num);
-            }
-        }else throw EnteredException("Аргумент arcsin и arccos не может быть больше 1 по модулю");
-
-    throw EnteredException("Не найдена функция: "+fun);
+                }
+            else throw EnteredException("Аргумент arccos не может быть больше 1 по модулю");
+   }
+   throw EnteredException("Не найдена функция: "+fun);
 }
 //Числа
 std::pair<QString,double> Calculate::Number(QString str){
@@ -227,3 +228,9 @@ std::pair<QString,double> Calculate::Number(QString str){
 bool Calculate::isSign(QChar s){
     return (s == '*' || s == '/' || s == '+' || s == '-');
 }
+QString Calculate::deleteExtraNulls(QString num){
+    num.remove( QRegExp("0+$") );
+    num.remove( QRegExp("\\.$") );
+    return num;
+}
+
