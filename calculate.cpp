@@ -207,7 +207,7 @@ std::pair<QString,double> Calculate::FuncName(QString fun, std::pair<QString,dou
 
     throw EnteredException("Не найдена функция: "+fun);
 }
-
+//Числа
 std::pair<QString,double> Calculate::Number(QString str){
     int i =0;
     int dotCount = 0;
@@ -222,4 +222,8 @@ std::pair<QString,double> Calculate::Number(QString str){
     double dPart = str.mid(0,i).toDouble();
     QString restPart = str.remove(0,i);
     return std::make_pair(restPart,dPart);
+}
+
+bool Calculate::isSign(QChar s){
+    return (s == '*' || s == '/' || s == '+' || s == '-');
 }

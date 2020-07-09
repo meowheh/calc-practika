@@ -25,6 +25,7 @@ class Calculate
 public:
     Calculate(QString, bool);
     double Resulting();                                                      //получение результата
+    static bool isSign(QChar);
 
 private:
     QString data;                                                            //всё выражение

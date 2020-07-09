@@ -7,44 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    sumInMemory = 0.0;
-    ui->history->addItem("История вычислений");
-    connect(ui->zero, SIGNAL(clicked()), this, SLOT(digitClicked()));
-    connect(ui->one, SIGNAL(clicked()), this, SLOT(digitClicked()));
-    connect(ui->two, SIGNAL(clicked()), this, SLOT(digitClicked()));
-    connect(ui->three, SIGNAL(clicked()), this, SLOT(digitClicked()));
-    connect(ui->four, SIGNAL(clicked()), this, SLOT(digitClicked()));
-    connect(ui->five, SIGNAL(clicked()), this, SLOT(digitClicked()));
-    connect(ui->six, SIGNAL(clicked()), this, SLOT(digitClicked()));
-    connect(ui->seven, SIGNAL(clicked()), this, SLOT(digitClicked()));
-    connect(ui->eight, SIGNAL(clicked()), this, SLOT(digitClicked()));
-    connect(ui->nine, SIGNAL(clicked()), this, SLOT(digitClicked()));
-
-    connect(ui->left_bracket,SIGNAL(clicked()),this,SLOT(bracketOperatorClicked()));
-    connect(ui->right_bracket,SIGNAL(clicked()),this,SLOT(bracketOperatorClicked()));
-
-    connect(ui->sqr,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
-    connect(ui->pow, SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
-    connect(ui->sqrt,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
-    connect(ui->fraction,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
-
-    connect(ui->pi,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
-    connect(ui->plus,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
-    connect(ui->minus,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
-    connect(ui->mult,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
-    connect(ui->division,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
-
-    connect(ui->sin,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
-    connect(ui->cos,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
-    connect(ui->tg,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
-    connect(ui->arcsin,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
-    connect(ui->arccos,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
-    connect(ui->arctg,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
-
-    connect(ui->MS,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
-    connect(ui->MR,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
-    connect(ui->MC,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
-    connect(ui->memory_plus,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
+    init();
 
 }
 MainWindow::~MainWindow()
@@ -206,7 +169,7 @@ void MainWindow::powOperatorClicked()
         }
    }else if (button == ui->sqrt){
         if(position != 0){
-            if(isSign(res[position - 1]) || res[position-1]=='('){
+            if(Calculate::isSign(res[position - 1]) || res[position-1]=='('){
                  res.insert(position,"sqrt()");
                  add = 5;
                  toolTipText = tr("sqrt( <выражение> )");
@@ -225,7 +188,7 @@ void MainWindow::powOperatorClicked()
    }
   else if(button == ui->fraction){
         if(position != 0){
-            if(isSign(res[position-1]) || res[position-1] == '('){
+            if(Calculate::isSign(res[position-1]) || res[position-1] == '('){
                  res.insert(position,"1/()");
                  add = 3;
                  toolTipText = tr("1 / ( <выражение> )");
@@ -268,7 +231,7 @@ void MainWindow::simpleOperatorClicked(){
     }
     else{
         if(position != 0){
-            if(!isSign(res[position-1]) && res[position-1]!='^'){
+            if(!Calculate::isSign(res[position-1]) && res[position-1]!='^'){
                 if(button == ui->plus){
                   res.insert(position,"+");
                  add = 1;
@@ -341,7 +304,7 @@ void MainWindow::trigonometricOperatorClicked(){
        res.insert(position,text.append("()"));
        add = text.size()-1;
    }
-   else if(isSign(res[position-1])|| res[position-1] == '('){
+   else if(Calculate::isSign(res[position-1])|| res[position-1] == '('){
        res.insert(position,text.append("()"));
        add = text.size()-1;
    }
@@ -472,16 +435,13 @@ void MainWindow::on_result_clicked()
     }
 }
 
- bool MainWindow::isSign(QChar s){
-    return (s == '*' || s == '/' || s == '+' || s == '-');
-}
-
+//слот выбора строки из списка прошлых операций
 void MainWindow::on_history_activated(const QString &arg1)
 {
     if(arg1 != "История вычислений")
         ui->lineEdit->setText(arg1);
 }
-
+//слот на нажатие кнопки ПГЗ
 void MainWindow::on_pgzButton_clicked()
 {
     if(ui->lineEdit->text() == "0" || ui->lineEdit->text() == ""){
@@ -498,7 +458,7 @@ void MainWindow::on_pgzButton_clicked()
         ui->lineEdit->setStyleSheet("border: 1px solid red");
     }
 }
-
+//слот на нажатие кнопки ОГЗ
 void MainWindow::on_ogzButton_clicked()
 {
     if(ui->lineEdit->text() == "0" || ui->lineEdit->text() == ""){
@@ -514,4 +474,56 @@ void MainWindow::on_ogzButton_clicked()
         ui->statusBar->showMessage(tr("Очистите строку вывода"));
         ui->lineEdit->setStyleSheet("border: 1px solid red");
     }
+}
+//назначение названий нестандартных кнопок и подключение сигналов к слотам
+void MainWindow::init(){
+
+    sumInMemory = 0.0;
+
+    ui->history->addItem("История вычислений");
+
+    ui->sqr->setText("x"+QString(0x00B2));
+    ui->pow->setText("x"+QString(0x207F));
+    ui->sqrt->setText(QString(0x221A));
+    ui->sign->setText(QString(0x00B1));
+    ui->pi->setText(QString(0x03C0));
+    ui->division->setText(QString(0x00F7));
+
+    connect(ui->zero, SIGNAL(clicked()), this, SLOT(digitClicked()));
+    connect(ui->one, SIGNAL(clicked()), this, SLOT(digitClicked()));
+    connect(ui->two, SIGNAL(clicked()), this, SLOT(digitClicked()));
+    connect(ui->three, SIGNAL(clicked()), this, SLOT(digitClicked()));
+    connect(ui->four, SIGNAL(clicked()), this, SLOT(digitClicked()));
+    connect(ui->five, SIGNAL(clicked()), this, SLOT(digitClicked()));
+    connect(ui->six, SIGNAL(clicked()), this, SLOT(digitClicked()));
+    connect(ui->seven, SIGNAL(clicked()), this, SLOT(digitClicked()));
+    connect(ui->eight, SIGNAL(clicked()), this, SLOT(digitClicked()));
+    connect(ui->nine, SIGNAL(clicked()), this, SLOT(digitClicked()));
+
+    connect(ui->left_bracket,SIGNAL(clicked()),this,SLOT(bracketOperatorClicked()));
+    connect(ui->right_bracket,SIGNAL(clicked()),this,SLOT(bracketOperatorClicked()));
+
+    connect(ui->sqr,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->pow, SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->sqrt,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+    connect(ui->fraction,SIGNAL(clicked()),this,SLOT(powOperatorClicked()));
+
+    connect(ui->pi,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->plus,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->minus,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->mult,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+    connect(ui->division,SIGNAL(clicked()),this,SLOT(simpleOperatorClicked()));
+
+    connect(ui->sin,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+    connect(ui->cos,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+    connect(ui->tg,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+    connect(ui->arcsin,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+    connect(ui->arccos,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+    connect(ui->arctg,SIGNAL(clicked()),this,SLOT(trigonometricOperatorClicked()));
+
+    connect(ui->MS,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
+    connect(ui->MR,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
+    connect(ui->MC,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
+    connect(ui->memory_plus,SIGNAL(clicked()),this,SLOT(memoryOperatorClicked()));
+
 }
