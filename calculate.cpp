@@ -64,8 +64,10 @@ std::pair<QString,double> Calculate::Term(QString str){
         }catch(EnteredException &e){
             throw e;
         }
+        if(symb == '/' && right.second == 0) throw EnteredException("Деление на 0 запрещено!");
         tempDouble = (symb == '*') ? tempDouble*right.second:
                                      tempDouble/right.second;
+
         temp = std::make_pair(right.first,tempDouble);
      }
     return temp;
