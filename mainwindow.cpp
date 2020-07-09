@@ -359,7 +359,7 @@ void MainWindow::on_result_clicked()
                         ui->lineEdit->insert(num1);
                         ui->lineEdit->insert("; a=");
                         ui->lineEdit->insert(num2);
-                        ui->statusBar->showMessage(tr("Результат успешно вычислен: d-рассторяние(kbt), a-дирекционный угол(deg)"));
+                        ui->statusBar->showMessage(tr("Результат успешно вычислен: d-рассторяние(kbt), a-азимут(deg)"));
                         QString saving = text +": d= "+ num1 + "; a= " + num2;
                         ui->history->addItem(saving);
                     }
@@ -405,8 +405,8 @@ void MainWindow::on_pgzButton_clicked()
         ui->lineEdit->clear();
         int currentPosition = ui->lineEdit->cursorPosition();
         ui->lineEdit->setText(tr("ПГЗ( ; ; ; )"));
-        ui->statusBar->showMessage(tr("ПГЗ(X1; Y1; d; a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - дирекционный угол (deg)"));
-        QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)), tr("ПГЗ(X1; Y1; d; a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - дирекционный угол (deg)"));
+        ui->statusBar->showMessage(tr("ПГЗ(X1; Y1; d; a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - азимут (deg)"));
+        QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)), tr("ПГЗ(X1; Y1; d; a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - азимут (deg)"));
         ui->lineEdit->setCursorPosition(currentPosition+4);
     }
     else{

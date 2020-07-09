@@ -5,26 +5,22 @@
 #include "enteredexception.h"
 
 const double pi = 3.141592653589793;
-const double R = 39588;   //радиус Земли
+const double R = 39587.56;                                                      //радиус Земли
 
 class GeodeticTask
 {
 public:
     GeodeticTask(QString);
 
-    QVector<double> CalcPGZ();
-    QVector<double> CalcOGZ();
+    QVector<double> CalcPGZ();                                               //решение ПГЗ
+    QVector<double> CalcOGZ();                                               //решение ОГЗ
 
 private:
     QString data;                                                            //всё выражение
 
-    QVector <double> CheckAndRead(QString);
-    QString CheckStr(QString);
-    QVector <double> ReadStr(QString);
-
-    QVector<double> SpherToCart(double, double);
-    QVector<double>Rotate(QVector<double>, double, int);
-    QVector<double>CartToSpher(QVector<double>);
+    QVector <double> CheckAndRead(QString);                                  //проверка на корректный ввод и чтение строки
+    QString CheckStr(QString);                                               //проверка корректности введенного выражения
+    QVector <double> ReadStr(QString);                                       //разбор введенных значений и проверка их корректночти
 
     double RadiansToDegrees(double);
     double DegreesToRadians(double);
