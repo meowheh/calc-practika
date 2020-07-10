@@ -24,3 +24,6 @@ HEADERS  += mainwindow.h \
     geodetictask.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    resource.qrc

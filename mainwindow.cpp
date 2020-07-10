@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    setWindowIcon(QIcon(":/img/img/icon.png"));
     ui->setupUi(this);
     init();
 
