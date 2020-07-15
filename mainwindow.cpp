@@ -234,18 +234,33 @@ void MainWindow::bracketOperatorClicked(){
     int add = 0;
     ui->lineEdit->setStyleSheet("border: 1px solid blue");
     QObject* button = QObject::sender();
-    if(ui->lineEdit->text() == "0"){
-        ui->lineEdit->clear();
-    }
     int position = ui->lineEdit->cursorPosition();
     QString res = ui->lineEdit->text();
+
     if(button == ui->left_bracket){
-        res.insert(position,"(");
-        add = 1;
-      res.append(")");
+        if(Calculate::isSign(res[position - 1]) || res[position-1] == '(' || res[position-1] == '^' || res == "0"){
+            if(res == "0"){
+                res.clear();
+                position = 0;
+            }
+            res.insert(position,"(");
+            add = 1;
+            res.append(")");
+        }
+        else{
+            ui->statusBar->showMessage(tr("Добавьте оператор или '('"));
+            ui->lineEdit->setStyleSheet("border: 1px solid red");
+        }
     }
     else if(button == ui->right_bracket){
-        res.insert(position,")");
+        if(res != "0"){
+            if (res[position-1].isDigit() || res[position-1] == ')')
+                res.insert(position,")");
+            else{
+                ui->statusBar->showMessage(tr("Добавьте число или ')'"));
+                ui->lineEdit->setStyleSheet("border: 1px solid red");
+            }
+        }
     }
     ui->lineEdit->setText(res);
     ui->lineEdit->setCursorPosition(position+add);
