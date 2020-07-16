@@ -217,20 +217,20 @@ void MainWindow::simpleOperatorClicked(){
     }
     else{
         if(position != 0){
-            if(!Calculate::isSign(res[position-1]) && res[position-1]!='^' && res[position-1]!='('){
-                if(button == ui->plus){
+            if(!Calculate::isSign(res[position-1]) && res[position-1]!='^'){
+                if(button == ui->plus &&  res[position-1]!='('){
                   res.insert(position,"+");
                  add = 1;
                  }
-                else if(button == ui->minus){
+                else if(button == ui->minus){ //Допустим ввод (-<выражение>)
                   res.insert(position,"-");
                   add = 1;
                  }
-                 else if(button == ui->mult){
+                 else if(button == ui->mult && res[position-1]!='('){
                   res.insert(position,"*");
                   add = 1;
                  }
-                else if(button == ui->division){
+                else if(button == ui->division && res[position-1]!='('){
                   res.insert(position,"/");
                   add = 1;
                  }
@@ -265,28 +265,39 @@ void MainWindow::bracketOperatorClicked(){
     QString res = ui->lineEdit->text();
 
     if(button == ui->left_bracket){
-        if(Calculate::isSign(res[position - 1]) || res[position-1] == '(' || res[position-1] == '^' || res == "0"){
-            if(res == "0"){
-                res.clear();
-                position = 0;
+        if(position){
+            if(Calculate::isSign(res[position - 1]) || res[position-1] == '(' || res[position-1] == '^' || res == "0"){
+                if(res == "0"){
+                    res.clear();
+                    position = 0;
+                }
+                res.insert(position,"(");
+                add = 1;
+                res.append(")");
             }
+            else{
+                ui->statusBar->showMessage(tr("Добавьте оператор или '('"));
+                ui->lineEdit->setStyleSheet("border: 1px solid red");
+            }
+        }
+        else{
             res.insert(position,"(");
             add = 1;
             res.append(")");
         }
-        else{
-            ui->statusBar->showMessage(tr("Добавьте оператор или '('"));
-            ui->lineEdit->setStyleSheet("border: 1px solid red");
-        }
+
     }
     else if(button == ui->right_bracket){
-        if(res != "0"){
-            if (res[position-1].isDigit() || res[position-1] == ')')
+        if(res != "0" && position){
+            if (res[position-1].isDigit() || res[position-1] == '(' || res[position-1]== ')')
                 res.insert(position,")");
             else{
-                ui->statusBar->showMessage(tr("Добавьте число или ')'"));
+                ui->statusBar->showMessage(tr("Добавьте число или '('"));
                 ui->lineEdit->setStyleSheet("border: 1px solid red");
             }
+        }else{
+            ui->statusBar->showMessage(tr("Вначале должна быть открывающая скобка"));
+            ui->lineEdit->setStyleSheet("border: 1px solid red");
         }
     }
     ui->lineEdit->setText(res);
