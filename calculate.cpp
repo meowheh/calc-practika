@@ -27,20 +27,24 @@ std::pair<QString,double> Calculate::MathExpr(QString str) {
         throw e;
     }
     double tempDouble = temp.second;
-    if(temp.first != ""){
+    bool b = 1;
+    while(temp.first != "" && b){
         if(temp.first[0] == '+' || temp.first[0] == '-'){
-           for(int i = 0; i < temp.first.length();++i){
                QChar symb =temp.first[0];
                QString next = temp.first.remove(0,1);
-               temp = Term(next);
-               if(symb == '+'){
-                   tempDouble+= temp.second;
+               try{
+                   temp = Term(next);
+
+                   if(symb == '+'){
+                       tempDouble+= temp.second;
+                   }
+                   else{
+                       tempDouble-=temp.second;
+                   }
+               }catch(EnteredException &e){
+                   throw e;
                }
-               else{
-                   tempDouble-=temp.second;
-               }
-           }
-        }
+        } else b = 0;
     }
     return std::make_pair(temp.first,tempDouble);
 }
@@ -61,14 +65,14 @@ std::pair<QString,double> Calculate::Term(QString str){
         std::pair<QString,double> right;
         try{
              right = Factor(next);
+             if(symb == '/' && right.second == 0) throw EnteredException("Деление на 0 запрещено!");
+             tempDouble = (symb == '*') ? tempDouble*right.second:
+                                           tempDouble/right.second;
+
+              temp = std::make_pair(right.first,tempDouble);
         }catch(EnteredException &e){
             throw e;
         }
-        if(symb == '/' && right.second == 0) throw EnteredException("Деление на 0 запрещено!");
-        tempDouble = (symb == '*') ? tempDouble*right.second:
-                                     tempDouble/right.second;
-
-        temp = std::make_pair(right.first,tempDouble);
      }
     return temp;
 }
@@ -79,8 +83,9 @@ std::pair<QString,double> Calculate::Factor(QString str){
     std::pair<QString,double> temp;
     std::pair<QString,double> res;
     if(firstChar == '-'){
+        QString next = str.remove(0,1);
       try{
-       temp = Factor(str.remove(0,1));
+       temp = Factor(next);
         }catch(EnteredException &e){
             throw e;
         }
@@ -89,8 +94,8 @@ std::pair<QString,double> Calculate::Factor(QString str){
     }
     else{
         try{
-         temp = Base(str);
-         tempDouble = temp.second;
+          temp = Base(str);
+          tempDouble = temp.second;
           res = std::make_pair(temp.first,temp.second);
             }catch(EnteredException &e){
             throw e;
@@ -100,7 +105,8 @@ std::pair<QString,double> Calculate::Factor(QString str){
                  QString next = temp.first.remove(0,1);
                  std::pair<QString,double> right;
                  try{
-                    right = Factor(next);}
+                    right = Factor(next);
+                 }
                  catch(EnteredException &e){
                      throw e;
                  }
@@ -120,8 +126,9 @@ std::pair<QString,double> Calculate::Base(QString str){
     QChar firstChar = str[0];
     if(firstChar == '('){
         std::pair<QString,double> res;
+        QString next = str.remove(0,1);
         try{
-             res = MathExpr(str.remove(0,1));
+             res = MathExpr(next);
         }catch(EnteredException& e){
             throw e;
         }
@@ -130,9 +137,6 @@ std::pair<QString,double> Calculate::Base(QString str){
                 res.first = res.first.remove(0,1);
             }
         }
-       else{
-                //throw EnteredException("Ошибка: не закрытая скобка");
-           }
       return res;
     }
       return Function(str);
@@ -148,8 +152,9 @@ std::pair<QString,double> Calculate::Function(QString str){
     if(fun != ""){
         if(str.length() > i && str[i] == '('){
             std::pair<QString,double> res;
+            QString next = str.remove(0,fun.length());
             try{
-                res = MathExpr(str.remove(0,fun.length()));
+                res = MathExpr(next);
             }catch(EnteredException &e){
                 throw e;
             }
