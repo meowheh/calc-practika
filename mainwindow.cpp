@@ -27,9 +27,22 @@ void MainWindow::digitClicked(){
         ui->lineEdit->clear();
     QString text = ui->lineEdit->text();
     int position = ui->lineEdit->cursorPosition();
-    text.insert(position,QString::number(digitValue));
-    ui->lineEdit->setText(text);
-    ui->lineEdit->setCursorPosition(position+1);
+    bool agree = false;
+    if (position == 0)
+        agree = true;
+    else{
+        if(text[position-1] != ')')
+            agree = true;
+    }
+    if(agree == true){
+        text.insert(position,QString::number(digitValue));
+        ui->lineEdit->setText(text);
+        ui->lineEdit->setCursorPosition(position+1);
+    }
+    else{
+        ui->statusBar->showMessage(tr("Ввод числа невозможен"));
+        ui->lineEdit->setStyleSheet("border: 1px solid red");
+    }
 }
 
 //слот на сигнал нажатия точки
@@ -180,17 +193,31 @@ void MainWindow::simpleOperatorClicked(){
     QObject* button = QObject::sender();
     if(ui->lineEdit->text() == "0")
         ui->lineEdit->clear();
-   int position = ui->lineEdit->cursorPosition();
+    int position = ui->lineEdit->cursorPosition();
     QString res = ui->lineEdit->text();
+    bool agree = false;
     if(button == ui->pi){
-           QString pi = QString::number(PI,'f',10);
-           pi = Calculate::deleteExtraNulls(pi);
-           res.insert(position,pi);
-           add = pi.length();
+        if(position == 0){
+           agree = true;
+        }
+        else{
+            if(Calculate::isSign(res[position-1]) || res[position-1]=='^' || res[position-1]=='(')
+                agree = true;
+        }
+        if (agree == true){
+            QString pi = QString::number(PI,'f',10);
+            pi = Calculate::deleteExtraNulls(pi);
+            res.insert(position,pi);
+            add = pi.length();
+        }
+        else{
+            ui->statusBar->showMessage(tr("Ввод числа невозможен"));
+            ui->lineEdit->setStyleSheet("border: 1px solid red");
+        }
     }
     else{
         if(position != 0){
-            if(!Calculate::isSign(res[position-1]) && res[position-1]!='^'){
+            if(!Calculate::isSign(res[position-1]) && res[position-1]!='^' && res[position-1]!='('){
                 if(button == ui->plus){
                   res.insert(position,"+");
                  add = 1;
