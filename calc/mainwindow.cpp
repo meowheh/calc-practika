@@ -348,11 +348,12 @@ void MainWindow::memoryOperatorClicked(){
     {
         double temp =(ui->lineEdit->text()).toDouble();
         if(temp != 0.0){
-            ui->statusBar->showMessage(tr("Значение ")+QString::number(sumInMemory)+tr(" было успешно записано"));
             sumInMemory = temp;
+            ui->statusBar->showMessage(tr("Значение ")+QString::number(sumInMemory)+tr(" было успешно записано"));
         }
         else{
             ui->statusBar->showMessage(tr("Вы ввели ноль или не вычислили результат выражения"));
+            ui->lineEdit->setStyleSheet("border: 1px solid red");
         }
     }
     else if(button == ui->MR){
