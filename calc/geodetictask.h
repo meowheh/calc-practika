@@ -1,17 +1,22 @@
 #ifndef GEODETICTASK_H
 #define GEODETICTASK_H
 
+#include <QObject>
+#include <QStringList>
 #include <cmath>
 #include "enteredexception.h"
 
 const double pi = 3.141592653589793;
 const double R = 39587.56;                                                      //радиус Земли
 
-class GeodeticTask
+class GeodeticTask: public QObject
 {
+    Q_OBJECT
 public:
     GeodeticTask(QString);
-
+    GeodeticTask(QObject *parent, const QStringList& list);
+    GeodeticTask();
+    void SetData(QString);
     QVector<double> CalcPGZ();                                               //решение ПГЗ
     QVector<double> CalcOGZ();                                               //решение ОГЗ
 

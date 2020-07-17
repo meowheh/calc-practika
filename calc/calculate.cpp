@@ -5,6 +5,8 @@ Calculate::Calculate(QString d, bool ang=1): data(d), angle(ang) {}
 
 Calculate::Calculate(){}
 
+Calculate::Calculate(QObject *parent, const QStringList &list) : QObject(parent) {}
+
 void Calculate::SetData(QString d, bool ang=1){
     data = d;
     angle = ang;

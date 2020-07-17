@@ -1,6 +1,8 @@
 #ifndef CALCULATE_H
 #define CALCULATE_H
 
+#include <QObject>
+#include <QStringList>
 #include <cmath>
 #include <QRegExp>
 #include "enteredexception.h"
@@ -22,11 +24,13 @@ const double delta = 0.000000000001;
  *   <Digit> ::= '0' | ... | '9'
  *   <Number> ::= <Digit> {<Digit>} ['.' <Digit> {<Digit>}] */
 
-class Calculate
+class Calculate : public QObject
 {
+    Q_OBJECT
 public:
     Calculate(QString, bool);
     Calculate();
+    Calculate(QObject *parent, const QStringList& list);
     double Resulting();                                                      //получение результата
     void SetData(QString,bool);                                              //Установить выражение
     static bool isSign(QChar);

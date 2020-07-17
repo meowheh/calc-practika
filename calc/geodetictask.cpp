@@ -3,7 +3,11 @@
 #include <QStringList>
 
 GeodeticTask::GeodeticTask(QString d): data (d) {}
-
+GeodeticTask::GeodeticTask(QObject *parent, const QStringList& list): QObject(parent){}
+GeodeticTask::GeodeticTask() {}
+void GeodeticTask::SetData(QString d) {
+    data = d;
+};
 QVector<double> GeodeticTask::CalcPGZ(){
     QString str = data;
     QVector<double> res;
