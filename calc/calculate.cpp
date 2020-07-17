@@ -3,6 +3,13 @@
 
 Calculate::Calculate(QString d, bool ang=1): data(d), angle(ang) {}
 
+Calculate::Calculate(){}
+
+void Calculate::SetData(QString d, bool ang=1){
+    data = d;
+    angle = ang;
+}
+
 double Calculate::Resulting(){
         QString str = data;
         std::pair<QString,double> res;

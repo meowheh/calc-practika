@@ -26,7 +26,9 @@ class Calculate
 {
 public:
     Calculate(QString, bool);
+    Calculate();
     double Resulting();                                                      //получение результата
+    void SetData(QString,bool);                                              //Установить выражение
     static bool isSign(QChar);
     static QString deleteExtraNulls(QString num);
 
