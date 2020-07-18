@@ -8,7 +8,7 @@ QT       += testlib
 
 QT       -= gui
 
-TARGET = tst_unit_testtest
+TARGET = tst_unit_calculate
 CONFIG   += console
 CONFIG   -= app_bundle
 
@@ -30,10 +30,11 @@ HEADERS += \
     ../calc/enteredexception.h \
     ../calc/geodetictask.h
 
-SOURCES += tst_unit_testtest.cpp \
+SOURCES += \
     ../calc/calculate.cpp \
     ../calc/enteredexception.cpp \
-    ../calc/geodetictask.cpp
+    ../calc/geodetictask.cpp \
+    tst_unit_calculate.cpp
 
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
