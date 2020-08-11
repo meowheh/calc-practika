@@ -181,7 +181,7 @@ void MainWindow::powOperatorClicked()
    if(result.second){
      ui->lineEdit->setText(result.first);
      ui->lineEdit->setCursorPosition(position+result.second);
-     QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)),toolTipText);
+     QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,ui->lineEdit->height())),toolTipText);
    }
 
 }
@@ -325,7 +325,7 @@ void MainWindow::trigonometricOperatorClicked(){
    if(add){
        ui->lineEdit->setText(res);
        ui->lineEdit->setCursorPosition(position+add);
-       QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)),button->text() + tr("( <выражение> )"));
+       QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,ui->lineEdit->height())),button->text() + tr("( <выражение> )"));
    }
    else{
        ui->statusBar->showMessage(tr("Добавьте операторы перед началом и в конце функции"));
@@ -461,7 +461,7 @@ void MainWindow::on_pgzButton_clicked()
         int currentPosition = ui->lineEdit->cursorPosition();
         ui->lineEdit->setText(tr("ПГЗ( ; ; ; )"));
         ui->statusBar->showMessage(tr("ПГЗ(X1; Y1; d; a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - азимут (deg)"));
-        QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)), tr("ПГЗ(X1; Y1; d; a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - азимут (deg)"));
+        QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,ui->lineEdit->height())), tr("ПГЗ(X1; Y1; d; a): X1,Y1 - координаты (deg); d - расстояние (kbt); a - азимут (deg)"));
         ui->lineEdit->setCursorPosition(currentPosition+4);
     }
     else{
@@ -478,7 +478,7 @@ void MainWindow::on_ogzButton_clicked()
         int currentPosition = ui->lineEdit->cursorPosition();
         ui->lineEdit->setText(tr("ОГЗ( ; ; ; )"));
         ui->statusBar->showMessage(tr("ОГЗ(X1; Y1; X2; Y2): X1, Y1, X2, Y2 - координаты (deg)"));
-        QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,25)), tr("ОГЗ(X1; Y1; X2; Y2): X1, Y1, X2, Y2 - координаты (deg)"));
+        QToolTip::showText(mapToGlobal(ui->lineEdit->pos()-QPoint(0,ui->lineEdit->height())), tr("ОГЗ(X1; Y1; X2; Y2): X1, Y1, X2, Y2 - координаты (deg)"));
         ui->lineEdit->setCursorPosition(currentPosition+4);
     }
     else{
